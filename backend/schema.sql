@@ -1,0 +1,89 @@
+-- ============================================================
+-- CODEFIX DATABASE SCHEMA (SQLite / PostgreSQL / Supabase Compatible)
+-- ============================================================
+
+-- 1. USERS TABLE
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  xp INTEGER DEFAULT 0,
+  streak INTEGER DEFAULT 1,
+  level INTEGER DEFAULT 1,
+  bugs_fixed INTEGER DEFAULT 0,
+  accuracy INTEGER DEFAULT 100,
+  hints_used INTEGER DEFAULT 0,
+  unlocked_level_id INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. LEVELS TABLE
+CREATE TABLE IF NOT EXISTS levels (
+  id INTEGER PRIMARY KEY,
+  title VARCHAR(150) NOT NULL,
+  topic VARCHAR(100) NOT NULL,
+  icon VARCHAR(10) NOT NULL,
+  difficulty INTEGER NOT NULL DEFAULT 1,
+  max_xp INTEGER NOT NULL DEFAULT 100,
+  description TEXT NOT NULL,
+  task TEXT NOT NULL,
+  code_json TEXT NOT NULL
+);
+
+-- 3. BUGS TABLE
+CREATE TABLE IF NOT EXISTS bugs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  level_id INTEGER NOT NULL,
+  bug_order INTEGER NOT NULL,
+  line INTEGER NOT NULL,
+  options_json TEXT NOT NULL,
+  correct_index INTEGER NOT NULL,
+  hint TEXT NOT NULL,
+  fixed_line TEXT NOT NULL,
+  explanation TEXT NOT NULL,
+  FOREIGN KEY (level_id) REFERENCES levels(id) ON DELETE CASCADE
+);
+
+-- 4. USER LEVEL PROGRESS TABLE
+CREATE TABLE IF NOT EXISTS user_level_progress (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  level_id INTEGER NOT NULL,
+  stars INTEGER NOT NULL DEFAULT 1,
+  xp INTEGER NOT NULL DEFAULT 0,
+  accuracy INTEGER NOT NULL DEFAULT 100,
+  time_seconds INTEGER NOT NULL DEFAULT 0,
+  completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (level_id) REFERENCES levels(id) ON DELETE CASCADE,
+  UNIQUE(user_id, level_id)
+);
+
+-- 5. ACHIEVEMENTS TABLE
+CREATE TABLE IF NOT EXISTS achievements (
+  id VARCHAR(50) PRIMARY KEY,
+  icon VARCHAR(10) NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  desc TEXT NOT NULL
+);
+
+-- 6. USER ACHIEVEMENTS JOIN TABLE
+CREATE TABLE IF NOT EXISTS user_achievements (
+  user_id INTEGER NOT NULL,
+  achievement_id VARCHAR(50) NOT NULL,
+  unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, achievement_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (achievement_id) REFERENCES achievements(id) ON DELETE CASCADE
+);
+
+-- 7. LEARN TOPICS TABLE
+CREATE TABLE IF NOT EXISTS learn_topics (
+  id VARCHAR(50) PRIMARY KEY,
+  icon VARCHAR(10) NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  desc TEXT NOT NULL,
+  level_id INTEGER NULLABLE,
+  FOREIGN KEY (level_id) REFERENCES levels(id) ON DELETE SET NULL
+);

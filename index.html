@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeFix - Cyberpunk Debugging</title>
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Cyberpunk Scanline Overlay -->
+  <div class="scanlines"></div>
+  <div id="toast-container"></div>
+
+  <div id="appShell" class="app-shell">
+    <!-- Navbar / Header (Always visible or contextual) -->
+    <header class="top-nav" id="topNav">
+      <div class="nav-brand" data-nav="landing">
+        <span class="glitch-text" data-text="CODEFIX">CODEFIX</span>
+      </div>
+      <div class="nav-links" id="publicNavLinks">
+        <button class="cyber-button-sm" data-nav="login">LOGIN</button>
+        <button class="cyber-button-sm primary" data-nav="signup">INITIATE</button>
+      </div>
+      <div class="nav-stats hidden" id="playerStatsNav">
+        <div class="stat-pill xp-pill">
+          <i class="fa-solid fa-bolt"></i> <span id="navXp">0</span> XP
+        </div>
+        <div class="stat-pill streak-pill">
+          <i class="fa-solid fa-fire"></i> <span id="navStreak">0</span>
+        </div>
+        <div class="stat-pill lives-pill">
+          <i class="fa-solid fa-heart"></i> <span id="navLives">3</span>
+        </div>
+        <div class="avatar-circle" id="navAvatar" data-nav="profile">U</div>
+      </div>
+    </header>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main id="mainContainer">
+      <!-- 1. LANDING PAGE -->
+      <section id="view-landing" class="view active-view relative overflow-hidden">
+        
+        <!-- Cyberpunk Animated Background Elements -->
+        <div class="animated-grid-bg"></div>
+        <div class="crt-scanner"></div>
+
+        <!-- SECTION 01 - HERO -->
+        <div class="landing-section hero-section">
+          <div class="hero-content scroll-fade-in">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10 tracking-widest">SYS.01 // ENTRY NODE</div>
+            <h1 class="glitch-text text-4xl md:text-6xl" data-text="DEBUG. COMPUTE. CONQUER.">DEBUG. COMPUTE. CONQUER.</h1>
+            <p class="hero-product-statement text-xl text-white font-bold mt-4 mb-2">Turn debugging into a competitive coding experience.</p>
+            <p class="hero-subtext text-gray-400 mb-6">Find bugs. Solve challenges. Earn XP. Build your streak. Climb the global leaderboard.</p>
+            
+            <div class="sys-telemetry flex gap-4 text-xs font-mono text-gray-500 mb-8 py-1">
+              <div class="telemetry-item flex items-center gap-2"><span class="t-dot green w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_#0f0]"></span> STATUS: ONLINE</div>
+              <div class="telemetry-item flex items-center gap-2"><span class="t-dot cyan w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_5px_#0ff]"></span> CHALLENGE DB: READY</div>
+            </div>
+
+            <div class="hero-actions flex gap-4">
+              <button class="cyber-button primary large" data-nav="signup">START JOURNEY</button>
+              <button class="cyber-button large" onclick="document.getElementById('section-whatis').scrollIntoView({behavior: 'smooth'})">EXPLORE SYSTEM</button>
+            </div>
+          </div>
+          
+          <!-- Landing Page Interactive Demo (Preserved exactly) -->
+          <div class="hero-demo scroll-fade-in" id="demo-terminal" style="transition-delay: 0.2s">
+            <div class="cyber-terminal shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+              <div class="terminal-header">
+                <span>// SYS.DEMO.TRAINING</span>
+                <div class="terminal-dots"><span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span></div>
+              </div>
+              <div class="terminal-body">
+                <p class="terminal-comment"># Identify the bug to unlock the system</p>
+                <div class="code-line selectable" data-demoline="1"><span class="line-num">1</span> <span class="syntax-keyword">function</span> <span class="syntax-func">calculateTotal</span>(<span class="syntax-arg">items</span>) {</div>
+                <div class="code-line selectable" data-demoline="2"><span class="line-num">2</span>   <span class="syntax-keyword">return</span> items.<span class="syntax-func">reduce</span>((total, item) => {</div>
+                <div class="code-line selectable buggy" data-demoline="3"><span class="line-num">3</span>     <span class="syntax-keyword">return</span> total + item.price</div>
+                <div class="code-line selectable" data-demoline="4"><span class="line-num">4</span>   })</div>
+                <div class="code-line selectable" data-demoline="5"><span class="line-num">5</span> }</div>
+              </div>
+              <div class="terminal-footer hidden" id="demo-feedback">
+                <div class="typing-text success-text">> SYSTEM BREACHED: Missing initial value (0) in reduce(). +50 XP.</div>
+                <button class="cyber-button-sm primary mt-2" data-nav="signup">CONTINUE TRAINING</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 02 - WHAT IS CODEFIX? -->
+        <div class="landing-section bg-black/40 border-t border-b border-cyan-900/30 py-20" id="section-whatis">
+          <div class="container mx-auto px-6 max-w-5xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.02 // DEFINITION</div>
+            <h2 class="section-title text-3xl font-display mb-2 scroll-fade-in text-white">WHAT IS CODEFIX?</h2>
+            <p class="section-subtitle scroll-fade-in text-gray-400 mb-12">CodeFix turns debugging into a game.</p>
+            
+            <div class="pipeline-container scroll-fade-in flex flex-col md:flex-row justify-between items-center gap-4">
+              <div class="pipeline-node flex flex-col items-center gap-2"><div class="p-icon w-12 h-12 rounded border border-gray-700 bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-file-code"></i></div><span class="text-xs font-mono text-gray-500">BROKEN CODE</span></div>
+              <div class="pipeline-line flex-grow h-px bg-gray-800 w-full md:w-auto"></div>
+              <div class="pipeline-node flex flex-col items-center gap-2"><div class="p-icon w-12 h-12 rounded border border-gray-700 bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-radar"></i></div><span class="text-xs font-mono text-gray-500">SCAN</span></div>
+              <div class="pipeline-line flex-grow h-px bg-gray-800 w-full md:w-auto"></div>
+              <div class="pipeline-node flex flex-col items-center gap-2"><div class="p-icon w-12 h-12 rounded border border-gray-700 bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-spider"></i></div><span class="text-xs font-mono text-gray-500">IDENTIFY BUG</span></div>
+              <div class="pipeline-line flex-grow h-px bg-gray-800 w-full md:w-auto"></div>
+              <div class="pipeline-node flex flex-col items-center gap-2"><div class="p-icon w-12 h-12 rounded border border-gray-700 bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-hammer"></i></div><span class="text-xs font-mono text-gray-500">PATCH</span></div>
+              <div class="pipeline-line flex-grow h-px bg-gray-800 w-full md:w-auto"></div>
+              <div class="pipeline-node flex flex-col items-center gap-2"><div class="p-icon w-12 h-12 rounded border border-gray-700 bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-play"></i></div><span class="text-xs font-mono text-gray-500">EXECUTE</span></div>
+              <div class="pipeline-line flex-grow h-px bg-cyan-900 w-full md:w-auto"></div>
+              <div class="pipeline-node highlight flex flex-col items-center gap-2"><div class="p-icon w-16 h-16 rounded border border-neon-cyan bg-cyan-900/20 flex items-center justify-center text-neon-cyan shadow-[0_0_15px_rgba(0,240,255,0.3)]"><i class="fa-solid fa-bolt text-xl"></i></div><span class="text-xs font-mono text-neon-cyan font-bold">XP REWARD</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 03 - THE CODEFIX LOOP -->
+        <div class="landing-section py-20">
+          <div class="container mx-auto px-6 max-w-5xl">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.03 // CORE LOOP</div>
+            <h2 class="section-title text-3xl font-display mb-8 scroll-fade-in text-white">THE CODEFIX LOOP</h2>
+            
+            <div class="loop-grid grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div class="loop-card scroll-fade-in cyber-panel p-6 border-t-2 border-cyan-500/50 bg-black/60 relative overflow-hidden group hover:border-cyan-400 transition-colors">
+                <div class="loop-num text-4xl font-display text-gray-800 absolute right-2 top-2 opacity-30 group-hover:text-cyan-900 transition-colors">01</div>
+                <h3 class="text-neon-cyan font-bold mb-2 relative z-10">HUNT</h3>
+                <p class="text-sm text-gray-400 relative z-10">Analyze broken code and locate the exact source of the crash.</p>
+              </div>
+              <div class="loop-card scroll-fade-in cyber-panel p-6 border-t-2 border-cyan-500/50 bg-black/60 relative overflow-hidden group hover:border-cyan-400 transition-colors" style="transition-delay: 0.1s">
+                <div class="loop-num text-4xl font-display text-gray-800 absolute right-2 top-2 opacity-30 group-hover:text-cyan-900 transition-colors">02</div>
+                <h3 class="text-neon-cyan font-bold mb-2 relative z-10">FIX</h3>
+                <p class="text-sm text-gray-400 relative z-10">Understand the problem and implement the correct solution.</p>
+              </div>
+              <div class="loop-card scroll-fade-in cyber-panel p-6 border-t-2 border-cyan-500/50 bg-black/60 relative overflow-hidden group hover:border-cyan-400 transition-colors" style="transition-delay: 0.2s">
+                <div class="loop-num text-4xl font-display text-gray-800 absolute right-2 top-2 opacity-30 group-hover:text-cyan-900 transition-colors">03</div>
+                <h3 class="text-neon-cyan font-bold mb-2 relative z-10">EXECUTE</h3>
+                <p class="text-sm text-gray-400 relative z-10">Run your patch against the system compiler.</p>
+              </div>
+              <div class="loop-card scroll-fade-in cyber-panel p-6 border-t-2 border-cyan-500/50 bg-black/60 relative overflow-hidden group hover:border-cyan-400 transition-colors" style="transition-delay: 0.3s">
+                <div class="loop-num text-4xl font-display text-gray-800 absolute right-2 top-2 opacity-30 group-hover:text-cyan-900 transition-colors">04</div>
+                <h3 class="text-neon-cyan font-bold mb-2 relative z-10">EARN</h3>
+                <p class="text-sm text-gray-400 relative z-10">Receive XP, badges, and progress your operator profile.</p>
+              </div>
+              <div class="loop-card scroll-fade-in cyber-panel p-6 border-t-2 border-cyan-500/50 bg-black/60 relative overflow-hidden group hover:border-cyan-400 transition-colors" style="transition-delay: 0.4s">
+                <div class="loop-num text-4xl font-display text-gray-800 absolute right-2 top-2 opacity-30 group-hover:text-cyan-900 transition-colors">05</div>
+                <h3 class="text-neon-cyan font-bold mb-2 relative z-10">CLIMB</h3>
+                <p class="text-sm text-gray-400 relative z-10">Rise through the global ranks and build your coding streak.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 04 - CORE SYSTEMS -->
+        <div class="landing-section bg-black/40 border-t border-b border-cyan-900/30 py-20">
+          <div class="container mx-auto px-6 max-w-5xl">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.04 // ARCHITECTURE</div>
+            <h2 class="section-title text-3xl font-display mb-8 scroll-fade-in text-white">CORE SYSTEMS</h2>
+            
+            <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow">
+                <i class="fa-solid fa-spider text-2xl text-neon-cyan mb-4"></i>
+                <h3 class="font-bold text-white mb-2">HUNT BUGS</h3>
+                <p class="text-sm text-gray-400">Analyze real code snippets across multiple languages and pinpoint the exact line causing the crash.</p>
+              </div>
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow" style="transition-delay: 0.1s">
+                <i class="fa-solid fa-bolt text-2xl text-neon-cyan mb-4"></i>
+                <h3 class="font-bold text-white mb-2">XP SYSTEM</h3>
+                <p class="text-sm text-gray-400">Earn experience for solving challenges and progressing through the platform.</p>
+              </div>
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow" style="transition-delay: 0.2s">
+                <i class="fa-solid fa-arrow-trend-up text-2xl text-neon-cyan mb-4"></i>
+                <h3 class="font-bold text-white mb-2">LEVEL PROGRESSION</h3>
+                <p class="text-sm text-gray-400">Your coding journey becomes a continuous progression system rather than disconnected exercises.</p>
+              </div>
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow" style="transition-delay: 0.3s">
+                <i class="fa-solid fa-fire text-2xl text-neon-pink mb-4"></i>
+                <h3 class="font-bold text-white mb-2">DAILY STREAK</h3>
+                <p class="text-sm text-gray-400">Maintain consistent practice and build your coding streak to unlock exclusive achievements.</p>
+              </div>
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow" style="transition-delay: 0.4s">
+                <i class="fa-solid fa-trophy text-2xl text-neon-yellow mb-4"></i>
+                <h3 class="font-bold text-white mb-2">GLOBAL LEADERBOARD</h3>
+                <p class="text-sm text-gray-400">Compete against other developers and climb the worldwide rankings.</p>
+              </div>
+              <div class="bento-card scroll-fade-in cyber-panel p-6 hover:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-shadow" style="transition-delay: 0.5s">
+                <i class="fa-solid fa-id-card text-2xl text-neon-green mb-4"></i>
+                <h3 class="font-bold text-white mb-2">OPERATOR PROFILE</h3>
+                <p class="text-sm text-gray-400">Your profile becomes your coding identity — showcasing your rank, badges, and performance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 05 - YOUR CODING JOURNEY -->
+        <div class="landing-section py-20">
+          <div class="container mx-auto px-6 max-w-5xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.05 // PROGRESSION</div>
+            <h2 class="section-title text-3xl font-display mb-2 scroll-fade-in text-white">YOUR CODING JOURNEY</h2>
+            <p class="section-subtitle scroll-fade-in text-gray-400 mb-12">You aren't just solving questions. You are progressing.</p>
+            
+            <div class="journey-path mt-8 scroll-fade-in flex flex-col items-center">
+              <div class="journey-node text-gray-500 font-mono text-sm flex flex-col items-center gap-2"><div class="dot w-3 h-3 rounded-full bg-gray-700"></div>BOOT SEQUENCE</div>
+              <div class="journey-line h-8 w-px bg-gray-700 my-2"></div>
+              <div class="journey-node text-cyan-700 font-mono text-sm flex flex-col items-center gap-2"><div class="dot w-3 h-3 rounded-full bg-cyan-700"></div>NOVICE DEBUGGER</div>
+              <div class="journey-line h-8 w-px bg-cyan-700 my-2"></div>
+              <div class="journey-node text-neon-cyan font-mono font-bold flex flex-col items-center gap-2 transform scale-110"><div class="dot w-4 h-4 rounded-full bg-neon-cyan shadow-[0_0_10px_#0ff]"></div>SCRIPT KIDDIE <span class="text-xs text-cyan-300 font-normal mt-1">[ CURRENT ]</span></div>
+              <div class="journey-line h-8 w-px bg-gray-800 my-2"></div>
+              <div class="journey-node text-gray-600 font-mono text-sm flex flex-col items-center gap-2 opacity-50"><div class="dot w-3 h-3 rounded-full bg-gray-800"></div>CODE HUNTER <span class="text-xs mt-1">[ 1500 XP REQUIRED ]</span></div>
+              <div class="journey-line h-8 w-px bg-gray-800 my-2"></div>
+              <div class="journey-node text-gray-600 font-mono text-sm flex flex-col items-center gap-2 opacity-30"><div class="dot w-3 h-3 rounded-full bg-gray-800"></div>SYSTEM ARCHITECT <span class="text-xs mt-1">[ LOCKED ]</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 06 - DEBUGGING CHAMBER -->
+        <div class="landing-section bg-black/40 border-t border-b border-cyan-900/30 py-20">
+          <div class="container mx-auto px-6 max-w-3xl">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.06 // SIMULATION</div>
+            <h2 class="section-title text-3xl font-display mb-8 scroll-fade-in text-white text-center">ENTER THE DEBUGGING CHAMBER</h2>
+            
+            <div class="chamber-preview scroll-fade-in mt-4 cyber-panel p-0 overflow-hidden border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.05)]">
+              <div class="chamber-header bg-black/60 p-4 border-b border-cyan-900/50 flex justify-between items-center">
+                <span class="text-neon-cyan font-mono font-bold">CHALLENGE_042</span>
+                <span class="text-gray-500 text-xs font-mono">LANG: JAVASCRIPT | DIFF: MEDIUM</span>
+              </div>
+              <div class="chamber-body p-6 bg-[#0a0a0c] font-mono text-sm leading-relaxed overflow-x-auto">
+                <pre><code><span class="text-pink-400">function</span> <span class="text-blue-400">processData</span>(user) {
+  <span class="text-pink-400">if</span> (!user.profile) {
+    <span class="bg-red-900/30 text-red-300 px-2 py-1 border-l-2 border-red-500 block my-1">return user.profile.name; <span class="text-gray-500 italic">// TypeError: Cannot read properties of undefined</span></span>
+  }
+  <span class="text-pink-400">return</span> user.profile.name;
+}</code></pre>
+              </div>
+              <div class="chamber-status bg-black/80 p-4 border-t border-cyan-900/50">
+                <div class="flex flex-wrap items-center gap-3 mb-3 text-xs font-mono">
+                  <span class="text-red-500 font-bold bg-red-900/20 px-2 py-1 rounded">[ ERROR DETECTED ]</span>
+                  <i class="fa-solid fa-arrow-right text-gray-600"></i>
+                  <span class="text-cyan-500 px-2 py-1">> PATCHING CODE...</span>
+                  <i class="fa-solid fa-arrow-right text-gray-600"></i>
+                  <span class="text-green-400 font-bold bg-green-900/20 px-2 py-1 rounded">[ EXECUTION SUCCESSFUL ]</span>
+                </div>
+                <div class="text-neon-yellow font-bold text-center border border-yellow-500/30 bg-yellow-500/10 py-2 rounded animate-pulse">
+                  +250 XP REWARDED | LEVEL PROGRESS +12%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 07 - WHY KEEP PLAYING? -->
+        <div class="landing-section py-20">
+          <div class="container mx-auto px-6 max-w-4xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.07 // GAMIFICATION</div>
+            <h2 class="section-title text-3xl font-display mb-12 scroll-fade-in text-white">WHY KEEP PLAYING?</h2>
+            
+            <div class="gamification-pipeline scroll-fade-in flex flex-wrap justify-center items-center gap-4 md:gap-8 font-mono text-sm">
+              <div class="g-step flex flex-col items-center gap-2"><div class="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center text-gray-400"><i class="fa-solid fa-code"></i></div><span class="text-gray-400">SOLVE</span></div>
+              <i class="fa-solid fa-angle-right text-gray-700"></i>
+              <div class="g-step flex flex-col items-center gap-2"><div class="w-10 h-10 rounded-full border border-cyan-700 flex items-center justify-center text-cyan-500"><i class="fa-solid fa-bolt"></i></div><span class="text-cyan-500">EARN XP</span></div>
+              <i class="fa-solid fa-angle-right text-gray-700"></i>
+              <div class="g-step flex flex-col items-center gap-2"><div class="w-10 h-10 rounded-full border border-pink-700 flex items-center justify-center text-pink-500"><i class="fa-solid fa-fire"></i></div><span class="text-pink-500">BUILD STREAK</span></div>
+              <i class="fa-solid fa-angle-right text-gray-700"></i>
+              <div class="g-step flex flex-col items-center gap-2"><div class="w-10 h-10 rounded-full border border-green-700 flex items-center justify-center text-green-500"><i class="fa-solid fa-medal"></i></div><span class="text-green-500">UNLOCK BADGE</span></div>
+              <i class="fa-solid fa-angle-right text-gray-700"></i>
+              <div class="g-step highlight flex flex-col items-center gap-2"><div class="w-14 h-14 rounded-full border-2 border-neon-cyan flex items-center justify-center text-neon-cyan shadow-[0_0_15px_rgba(0,240,255,0.4)]"><i class="fa-solid fa-trophy text-xl"></i></div><span class="text-neon-cyan font-bold">CLIMB RANK</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 08 - GLOBAL NETWORK (LEADERBOARD) -->
+        <div class="landing-section bg-black/40 border-t border-b border-cyan-900/30 py-20">
+          <div class="container mx-auto px-6 max-w-3xl">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.08 // MULTIPLAYER</div>
+            <h2 class="section-title text-3xl font-display mb-2 scroll-fade-in text-white text-center">GLOBAL NETWORK</h2>
+            <p class="section-subtitle scroll-fade-in text-gray-400 mb-8 text-center">Compete. Improve. Climb.</p>
+            
+            <div class="leaderboard-preview cyber-panel scroll-fade-in bg-black/80 p-0 overflow-hidden">
+              <div class="lb-header flex justify-between p-4 bg-gray-900/50 text-xs font-mono text-gray-500 border-b border-gray-800">
+                <div class="flex-1">RANK</div><div class="flex-[3]">OPERATOR</div><div class="flex-1 text-right">STREAK</div><div class="flex-1 text-right">XP</div>
+              </div>
+              <div class="lb-row flex justify-between p-4 border-b border-gray-800/50 items-center bg-yellow-900/10"><div class="flex-1 text-neon-yellow font-mono">01</div><div class="flex-[3] font-bold text-white tracking-wide">NULLBYTE</div><div class="flex-1 text-right font-mono text-gray-300">42 <i class="fa-solid fa-fire text-neon-pink"></i></div><div class="flex-1 text-right font-mono text-neon-cyan">18,420</div></div>
+              <div class="lb-row flex justify-between p-4 border-b border-gray-800/50 items-center"><div class="flex-1 text-gray-300 font-mono">02</div><div class="flex-[3] font-bold text-gray-200 tracking-wide">CODEPHANTOM</div><div class="flex-1 text-right font-mono text-gray-300">31 <i class="fa-solid fa-fire text-neon-pink"></i></div><div class="flex-1 text-right font-mono text-cyan-500">17,890</div></div>
+              <div class="lb-row flex justify-between p-4 border-b border-gray-800/50 items-center"><div class="flex-1 text-gray-400 font-mono">03</div><div class="flex-[3] font-bold text-gray-300 tracking-wide">ROOT_ACCESS</div><div class="flex-1 text-right font-mono text-gray-300">27 <i class="fa-solid fa-fire text-neon-pink"></i></div><div class="flex-1 text-right font-mono text-cyan-500">16,740</div></div>
+              <div class="lb-row flex justify-between p-4 border-b border-gray-800/50 items-center"><div class="flex-1 text-gray-500 font-mono">04</div><div class="flex-[3] font-bold text-gray-400 tracking-wide">DEBUGGER_X</div><div class="flex-1 text-right font-mono text-gray-400">19 <i class="fa-solid fa-fire text-pink-700"></i></div><div class="flex-1 text-right font-mono text-cyan-600">15,920</div></div>
+              <div class="lb-row user-row flex justify-between p-4 bg-cyan-900/20 border-l-2 border-neon-cyan items-center"><div class="flex-1 text-neon-green font-mono">05</div><div class="flex-[3] font-bold text-white tracking-wide">YOU</div><div class="flex-1 text-right font-mono text-white">17 <i class="fa-solid fa-fire text-neon-pink"></i></div><div class="flex-1 text-right font-mono text-neon-cyan">14,850</div></div>
+              <div class="p-3 text-xs text-gray-600 text-center font-mono">* SYSTEM PREVIEW DATA</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 09 - OPERATOR PROFILE -->
+        <div class="landing-section py-20">
+          <div class="container mx-auto px-6 max-w-4xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.09 // IDENTITY</div>
+            <h2 class="section-title text-3xl font-display mb-8 scroll-fade-in text-white">YOUR OPERATOR PROFILE</h2>
+            
+            <div class="profile-preview bento-card cyber-panel flex flex-col sm:flex-row items-center gap-6 scroll-fade-in mt-4 mx-auto text-left" style="max-width: 600px;">
+              <div class="w-20 h-20 rounded-full border-2 border-neon-cyan bg-cyan-900/20 flex items-center justify-center text-3xl font-bold text-neon-cyan shadow-[0_0_15px_rgba(0,240,255,0.3)] shrink-0">C</div>
+              <div class="profile-info flex-grow w-full">
+                <h3 class="glitch-text text-2xl font-display text-white mb-1" data-text="CODEFIX_USER">CODEFIX_USER</h3>
+                <div class="text-neon-cyan text-sm mb-4 font-mono font-bold tracking-wide">BUG HUNTER</div>
+                <div class="flex gap-6 mb-4">
+                  <div><span class="text-gray-500 text-xs block font-mono">LEVEL</span><span class="font-mono text-white text-lg">12</span></div>
+                  <div><span class="text-gray-500 text-xs block font-mono">XP</span><span class="font-mono text-neon-cyan text-lg">4,280</span></div>
+                  <div><span class="text-gray-500 text-xs block font-mono">STREAK</span><span class="font-mono text-neon-pink text-lg">17</span></div>
+                </div>
+                <div class="text-xs text-gray-400 font-mono">ACHIEVEMENTS: 
+                  <span class="text-neon-cyan border border-cyan-500/30 px-1 rounded ml-1 bg-cyan-900/20"><i class="fa-solid fa-spider mr-1"></i> BUG SLAYER</span> 
+                  <span class="text-neon-cyan border border-cyan-500/30 px-1 rounded ml-1 bg-cyan-900/20"><i class="fa-solid fa-droplet mr-1"></i> FIRST BLOOD</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 10 - BUILT FOR PROGRESS -->
+        <div class="landing-section bg-black/40 border-t border-b border-cyan-900/30 py-20">
+          <div class="container mx-auto px-6 max-w-5xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.10 // DIFFERENTIATION</div>
+            <h2 class="section-title text-3xl font-display mb-12 scroll-fade-in text-white">NOT ANOTHER CODING SITE</h2>
+            
+            <div class="diff-container scroll-fade-in flex flex-col md:flex-row gap-8 justify-center items-stretch">
+              <div class="diff-card cyber-panel bg-transparent border-gray-800 opacity-50 grayscale flex-1 p-8 text-center">
+                <h4 class="text-sm text-gray-400 mb-6 font-mono tracking-widest">TRADITIONAL PLATFORMS</h4>
+                <div class="text-sm font-mono flex flex-col items-center gap-4 text-gray-500">
+                  <span class="bg-gray-900 px-4 py-2 rounded w-full">QUESTION</span>
+                  <i class="fa-solid fa-arrow-down"></i>
+                  <span class="bg-gray-900 px-4 py-2 rounded w-full">SOLVE</span>
+                  <i class="fa-solid fa-arrow-down"></i>
+                  <span class="bg-gray-900 px-4 py-2 rounded w-full">SUBMIT</span>
+                </div>
+              </div>
+              <div class="text-2xl text-gray-700 font-display flex items-center justify-center hidden md:flex">VS</div>
+              <div class="diff-card cyber-panel border-neon-cyan shadow-[0_0_15px_rgba(0,240,255,0.1)] flex-1 p-8 text-center bg-cyan-900/5">
+                <h4 class="text-sm text-neon-cyan mb-6 font-mono tracking-widest font-bold">CODEFIX SYSTEM</h4>
+                <div class="text-sm font-mono flex flex-col items-center gap-3 text-white">
+                  <span class="bg-cyan-900/40 border border-cyan-500/30 px-4 py-2 rounded w-full">CHALLENGE</span>
+                  <i class="fa-solid fa-arrow-down text-neon-cyan text-xs"></i>
+                  <span class="bg-cyan-900/40 border border-cyan-500/30 px-4 py-2 rounded w-full">INVESTIGATION</span>
+                  <i class="fa-solid fa-arrow-down text-neon-cyan text-xs"></i>
+                  <span class="bg-cyan-900/40 border border-cyan-500/30 px-4 py-2 rounded w-full">DEBUGGING</span>
+                  <i class="fa-solid fa-arrow-down text-neon-cyan text-xs"></i>
+                  <span class="bg-neon-cyan text-black font-bold px-4 py-2 rounded w-full shadow-[0_0_10px_rgba(0,240,255,0.5)]">REWARD & PROGRESS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 11 - SYSTEM EXPANSION -->
+        <div class="landing-section py-20">
+          <div class="container mx-auto px-6 max-w-5xl text-center">
+            <div class="sys-badge text-neon-cyan text-xs font-mono mb-4 border border-cyan-500/30 inline-block px-2 py-1 rounded bg-cyan-500/10">SYS.11 // ROADMAP</div>
+            <h2 class="section-title text-3xl font-display mb-8 scroll-fade-in text-white">SYSTEM EXPANSION</h2>
+            
+            <div class="expansion-grid grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 scroll-fade-in">
+              <div class="expansion-card cyber-panel bg-black/40 border-gray-800 opacity-60 p-6 flex flex-col items-center justify-center text-center">
+                <i class="fa-solid fa-lock text-gray-500 mb-4 text-2xl"></i>
+                <h4 class="text-gray-300 font-bold mb-2">MULTIPLAYER DEBUGGING</h4>
+                <span class="text-xs font-mono bg-gray-900 text-gray-500 px-2 py-1 rounded">COMING SOON</span>
+              </div>
+              <div class="expansion-card cyber-panel bg-black/40 border-gray-800 opacity-60 p-6 flex flex-col items-center justify-center text-center">
+                <i class="fa-solid fa-lock text-gray-500 mb-4 text-2xl"></i>
+                <h4 class="text-gray-300 font-bold mb-2">BOSS CHALLENGES</h4>
+                <span class="text-xs font-mono bg-gray-900 text-gray-500 px-2 py-1 rounded">COMING SOON</span>
+              </div>
+              <div class="expansion-card cyber-panel bg-black/40 border-gray-800 opacity-60 p-6 flex flex-col items-center justify-center text-center">
+                <i class="fa-solid fa-lock text-gray-500 mb-4 text-2xl"></i>
+                <h4 class="text-gray-300 font-bold mb-2">TEAM BATTLES</h4>
+                <span class="text-xs font-mono bg-gray-900 text-gray-500 px-2 py-1 rounded">COMING SOON</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 12 - FINAL CTA -->
+        <div class="landing-section bg-[#050505] text-center border-t border-cyan-900/50 py-32 relative overflow-hidden">
+          <!-- Subtle background scanline effect -->
+          <div class="absolute inset-0 bg-[linear-gradient(rgba(0,240,255,0.03)_1px,transparent_1px)] bg-[length:100%_4px] pointer-events-none"></div>
+          
+          <div class="container mx-auto px-6 relative z-10">
+            <div class="sys-badge text-neon-pink font-bold text-xs font-mono mb-6 border border-pink-500/50 inline-block px-3 py-1 rounded bg-pink-500/10 animate-pulse tracking-widest">SYS.12 // READY</div>
+            <h2 class="text-4xl md:text-6xl font-display text-white mb-4 scroll-fade-in drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">THE NEXT BUG IS WAITING.</h2>
+            <p class="text-gray-400 scroll-fade-in mb-10 text-lg max-w-2xl mx-auto">Enter the debugging network. Build your streak. Climb the ranks.</p>
+            
+            <button class="cyber-button primary scroll-fade-in" data-nav="signup" style="font-size: 1.25rem; padding: 1.25rem 4rem;">START JOURNEY</button>
+            
+            <div class="mt-12 text-xs text-gray-600 font-mono scroll-fade-in tracking-widest leading-loose">
+              NO EXPERIENCE REQUIRED<br>
+              JUST CODE. CURIOSITY. AND A WILLINGNESS TO BREAK THINGS.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 2. AUTHENTICATION (Login / Signup) -->
+      <section id="view-auth" class="view">
+        <div class="auth-container">
+          <div class="cyber-panel">
+            <h2 id="authTitle">SYS.LOGIN</h2>
+            <form id="authForm" class="cyber-form">
+              <div class="form-group" id="nameGroup">
+                <label>OPERATIVE NAME</label>
+                <input type="text" id="authName" placeholder="Enter alias" class="cyber-input" />
+              </div>
+              <div class="form-group">
+                <label>NETWORK EMAIL</label>
+                <input type="email" id="authEmail" placeholder="you@cyber.net" class="cyber-input" required />
+              </div>
+              <div class="form-group">
+                <label>ACCESS CODES (PASSWORD)</label>
+                <input type="password" id="authPassword" placeholder="••••••••" class="cyber-input" required />
+              </div>
+              <button type="submit" class="cyber-button primary w-full" id="authSubmitBtn">AUTHENTICATE</button>
+            </form>
+            <div class="auth-switch">
+              <span id="authToggleText">New operative?</span> 
+              <button class="cyber-link" id="authToggleBtn">REGISTER</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DASHBOARD / MISSION SELECT -->
+      <section id="view-dashboard" class="view app-view">
+        <div class="dashboard-grid">
+          <!-- Sidebar Nav -->
+          <nav class="cyber-sidebar">
+            <button class="nav-item active" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
+            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
+            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
+            <button class="nav-item text-danger" id="logoutBtn"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+          </nav>
+
+          <!-- Main Content -->
+          <div class="dashboard-content">
+            <h2 class="view-title">MISSION LOG</h2>
+            <div class="levels-container" id="levelsGrid">
+              <!-- Levels injected via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. GAMEPLAY TERMINAL -->
+      <section id="view-game" class="view">
+        <div class="gameplay-container">
+          <div class="game-header">
+            <button class="cyber-button-sm" data-nav="dashboard"><i class="fa-solid fa-arrow-left"></i> ABORT</button>
+            <h2 id="gameLevelTitle">MISSION 01</h2>
+            <div class="game-hud">
+              <span id="gameTimer" class="cyber-timer">00:00</span>
+            </div>
+          </div>
+
+          <div class="game-layout">
+            <!-- Left: Mission Briefing & Choices -->
+            <div class="game-panel side-panel">
+              <div class="panel-box">
+                <div class="box-header">BRIEFING</div>
+                <div class="box-content">
+                  <p id="gameTaskDesc" class="text-sm">Identify the error in this module.</p>
+                </div>
+              </div>
+
+              <!-- Question 1: Which line? -->
+              <div class="panel-box mt-4" id="qLineBlock">
+                <div class="box-header">TARGET LINE</div>
+                <div class="box-content">
+                  <p class="text-xs mb-2">Select the corrupted line in the terminal.</p>
+                  <div id="selectedLineDisplay" class="cyber-value hidden">Line: <span></span></div>
+                </div>
+              </div>
+
+              <!-- Question 2: Why? -->
+              <div class="panel-box mt-4 hidden" id="qReasonBlock">
+                <div class="box-header">CORRUPTION TYPE</div>
+                <div class="box-content">
+                  <div class="reason-list" id="reasonList">
+                    <!-- Reasons injected here -->
+                  </div>
+                  <button class="cyber-button primary w-full mt-4" id="submitBugBtn" disabled>EXECUTE FIX</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Code Terminal -->
+            <div class="game-panel main-panel">
+              <div class="cyber-terminal full-height">
+                <div class="terminal-header">
+                  <span id="gameFileName">target.js</span>
+                  <button class="icon-btn hint-btn" id="gameHintBtn" title="Request Hint (-10 XP)"><i class="fa-solid fa-lightbulb"></i></button>
+                </div>
+                <div class="terminal-body" id="gameTerminalBody">
+                  <!-- Code injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. LEADERBOARD -->
+      <section id="view-leaderboard" class="view app-view">
+         <div class="dashboard-grid">
+          <nav class="cyber-sidebar">
+            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
+            <button class="nav-item active" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
+            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
+            <button class="nav-item text-danger" id="logoutBtnLB"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+          </nav>
+          <div class="dashboard-content">
+            <h2 class="view-title">GLOBAL RANKINGS</h2>
+            <div class="cyber-panel">
+              <div class="leaderboard-list" id="leaderboardList">
+                <!-- LB rows injected here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. PROFILE -->
+      <section id="view-profile" class="view app-view">
+        <div class="dashboard-grid">
+          <nav class="cyber-sidebar">
+            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
+            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
+            <button class="nav-item active" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
+            <button class="nav-item text-danger" id="logoutBtnProfile"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+          </nav>
+          
+          <div class="dashboard-content profile-layout">
+            <h2 class="view-title">OPERATIVE DOSSIER</h2>
+            
+            <div class="bento-grid profile-bento">
+              <!-- A. Identity & Level -->
+              <div class="bento-card cyber-panel col-span-2 flex-row profile-header">
+                <div class="profile-avatar-large" id="profileAvatar">U</div>
+                <div class="profile-info flex-grow">
+                  <h3 id="profileName" class="glitch-text text-xl" data-text="UNKNOWN">UNKNOWN</h3>
+                  <div class="text-neon-cyan text-sm mb-4" id="profileTitle">NOVICE HACKER</div>
+                  
+                  <div class="xp-progress-container">
+                    <div class="flex justify-between text-xs mb-1">
+                      <span id="profileLevelTxt">LEVEL 1</span>
+                      <span class="text-muted"><span id="profileXpTxt">0</span> / <span id="profileNextXpTxt">200</span> XP</span>
+                    </div>
+                    <div class="xp-bar-bg">
+                      <div class="xp-bar-fill" id="profileXpBar"></div>
+                    </div>
+                    <div class="text-xs text-muted mt-1 text-right" id="profileXpRemainingTxt">200 XP TO NEXT LEVEL</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- B. Core Stats -->
+              <div class="bento-card cyber-panel stat-block">
+                <i class="fa-solid fa-bolt text-neon-cyan mb-2"></i>
+                <div class="text-sm text-muted">TOTAL XP</div>
+                <div class="text-2xl font-mono text-neon-cyan" id="statXp">0</div>
+              </div>
+              <div class="bento-card cyber-panel stat-block">
+                <i class="fa-solid fa-fire text-neon-pink mb-2"></i>
+                <div class="text-sm text-muted">CURRENT STREAK</div>
+                <div class="text-2xl font-mono text-neon-pink" id="statStreak">0</div>
+              </div>
+              <div class="bento-card cyber-panel stat-block">
+                <i class="fa-solid fa-bug text-neon-green mb-2"></i>
+                <div class="text-sm text-muted">BUGS SQUASHED</div>
+                <div class="text-2xl font-mono text-neon-green" id="statBugs">0</div>
+              </div>
+              <div class="bento-card cyber-panel stat-block">
+                <i class="fa-solid fa-crosshairs text-neon-yellow mb-2"></i>
+                <div class="text-sm text-muted">AVG ACCURACY</div>
+                <div class="text-2xl font-mono text-neon-yellow" id="statAccuracy">0%</div>
+              </div>
+
+              <!-- C. Next Milestone -->
+              <div class="bento-card cyber-panel col-span-2 milestone-block">
+                <div class="box-header mb-4">NEXT MILESTONE</div>
+                <div id="nextMilestoneContent">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- D. Achievements Showcase -->
+              <div class="bento-card cyber-panel col-span-2">
+                <div class="box-header mb-4">ACHIEVEMENTS</div>
+                <div class="achievements-grid" id="achievementsList">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- E. Recent Mission Log -->
+              <div class="bento-card cyber-panel col-span-2">
+                <div class="box-header mb-4">RECENT MISSIONS</div>
+                <div class="mission-log-list" id="recentMissionsList">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Cyberpunk Modal Overlay -->
+  <div class="modal-overlay hidden" id="gameModalOverlay">
+    <div class="cyber-modal" id="gameModal">
+      <div class="modal-corner top-left"></div>
+      <div class="modal-corner top-right"></div>
+      <div class="modal-corner bottom-left"></div>
+      <div class="modal-corner bottom-right"></div>
+      <h2 id="modalTitle" class="glitch-text" data-text="SUCCESS">SUCCESS</h2>
+      <div class="modal-content" id="modalContent"></div>
+      <button class="cyber-button primary mt-4" id="modalActionBtn">CONTINUE</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
