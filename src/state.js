@@ -28,8 +28,59 @@ export const State = {
     } else {
       // Fallback data
       this.levels = [
-        { id: 1, title: 'Variable Valley', topic: 'Variables', difficulty: 1, max_xp: 150, locked: false },
-        { id: 2, title: 'Type Trouble', topic: 'Data Types', difficulty: 1, max_xp: 180, locked: true }
+        { 
+          id: 1, title: 'Variable Valley', topic: 'Variables', difficulty: 1, max_xp: 150, locked: false,
+          description: "A student is trying to store their score in a variable, but typed the name differently every time they used it.",
+          task: "Find and correct the mistake.",
+          code: [
+            { n: 1, text: "score = 10" },
+            { n: 2, text: "Score = score + 5" },
+            { n: 3, text: "print(score)" }
+          ],
+          bugs: [
+            {
+              bugOrder: 1,
+              line: 2,
+              options: [
+                "Missing colon",
+                "Wrong variable name (case mismatch)",
+                "Wrong operator",
+                "No error"
+              ],
+              correctIndex: 1,
+              hint: "Python is case-sensitive. Look closely at the capitalization on line 2.",
+              fixedLine: "score = score + 5",
+              explanation: '"Score" and "score" are two different variables in Python because variable names are case-sensitive. Line 2 accidentally created a brand-new variable instead of updating the original.'
+            }
+          ]
+        },
+        { 
+          id: 2, title: 'Type Trouble', topic: 'Data Types', difficulty: 1, max_xp: 180, locked: true,
+          description: "A program should add two numbers entered by the user, but keeps joining them like text instead.",
+          task: "Find and correct both mistakes.",
+          code: [
+            { n: 1, text: 'a = input("Enter first number: ")' },
+            { n: 2, text: 'b = input("Enter second number: ")' },
+            { n: 3, text: 'total = a + b' },
+            { n: 4, text: 'print("Total:", total)' }
+          ],
+          bugs: [
+            {
+              bugOrder: 1,
+              line: 1,
+              options: [
+                "input() should be int(input())",
+                "Missing colon",
+                "Wrong variable name",
+                "No error"
+              ],
+              correctIndex: 0,
+              hint: "input() always returns text (a string), even if the user types a number.",
+              fixedLine: 'a = int(input("Enter first number: "))',
+              explanation: 'input() always returns a string. Without converting it with int(), line 3 joins the two strings together ("3"+"4" becomes "34") instead of adding numbers.'
+            }
+          ]
+        }
       ];
     }
   },

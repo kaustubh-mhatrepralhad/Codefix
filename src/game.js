@@ -9,16 +9,21 @@ export async function startGame(levelId) {
   const level = State.levels.find(l => l.id === levelId);
   if (!level) return;
 
-  // We need full level data. If we only have basic list, fetch single level
   let fullLevel = level;
   if (!level.code && State.isOnline) {
     try {
       const res = await fetch(`${State.baseUrl}/levels/${levelId}`);
+      if (!res.ok) throw new Error('Failed to fetch');
       fullLevel = await res.json();
     } catch (e) {
       showToast('Failed to load level data', 'error');
       return;
     }
+  }
+
+  if (!fullLevel || !fullLevel.code) {
+    showToast('Level code is unavailable', 'error');
+    return;
   }
 
   session = {
