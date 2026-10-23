@@ -2,15 +2,24 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 const { get, all, run } = require('./db');
 const seedDatabase = require('./seed');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'codefix_secret_key_2026';
+const IS_PROD = process.env.NODE_ENV === 'production';
 
 app.use(cors());
 app.use(express.json());
+
+// Serve the Vite-built frontend in production
+if (IS_PROD) {
+  const distPath = path.join(__dirname, '..', 'dist');
+  app.use(express.static(distPath));
+}
+
 
 // Authentication Middleware
 const authenticateToken = (req, res, next) => {
@@ -328,6 +337,13 @@ app.get('/api/achievements', async (req, res) => {
     res.status(500).json({ error: 'Server error fetching achievements' });
   }
 });
+
+// SPA Fallback: send index.html for all non-API routes in production
+if (IS_PROD) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+  });
+}
 
 // Start Server after database is initialized & seeded
 seedDatabase().then(() => {

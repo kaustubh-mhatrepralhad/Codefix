@@ -1,5 +1,8 @@
 export const State = {
-  baseUrl: 'http://localhost:5000/api',
+  baseUrl: window.location.hostname === 'localhost'
+    ? 'http://localhost:5000/api'
+    : `${window.location.origin}/api`,
+
   isOnline: false,
   user: null,
   levels: [],
