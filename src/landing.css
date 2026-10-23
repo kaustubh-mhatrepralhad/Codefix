@@ -223,7 +223,7 @@
 .scroll-fade-in {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .scroll-fade-in.is-visible {
@@ -233,16 +233,76 @@
 
 /* Hide scrollbar for overflow areas */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-dark);
+  background: var(--bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.25);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 240, 255, 0.5);
+}
+
+/* --- Mobile Specific Landing Refinements --- */
+@media (max-width: 768px) {
+  .py-20 {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  .py-32 {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+  .section-title {
+    font-size: 1.65rem;
+  }
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Pipeline connectors in vertical mobile mode */
+  .pipeline-container {
+    gap: 0.5rem;
+  }
+  .pipeline-container .pipeline-line {
+    width: 2px !important;
+    height: 20px !important;
+    flex-grow: 0 !important;
+    margin: 2px 0;
+  }
+  
+  /* Gamification pipeline */
+  .gamification-pipeline {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .gamification-pipeline .fa-angle-right {
+    transform: rotate(90deg);
+  }
+  
+  /* Chamber preview */
+  .chamber-body {
+    padding: 1rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Leaderboard Preview */
+  .leaderboard-preview .lb-header,
+  .leaderboard-preview .lb-row {
+    padding: 10px 8px;
+    font-size: 0.78rem;
+  }
+  
+  /* Differentiation Cards */
+  .diff-container {
+    gap: 1.5rem;
+  }
+  .diff-card {
+    padding: 1.5rem 1rem;
+  }
 }

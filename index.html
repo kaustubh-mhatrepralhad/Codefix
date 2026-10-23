@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#03060a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>CodeFix - Cyberpunk Debugging</title>
   
   <!-- Font Awesome for Icons -->
@@ -10,8 +13,10 @@
 </head>
 <body>
 
-  <!-- Cyberpunk Scanline Overlay -->
+  <!-- Cyberpunk Scanline & Grid Overlays -->
   <div class="scanlines"></div>
+  <div class="animated-grid-bg"></div>
+  <div class="crt-scanner"></div>
   <div id="toast-container"></div>
 
   <div id="appShell" class="app-shell">
@@ -25,13 +30,13 @@
         <button class="cyber-button-sm primary" data-nav="signup">INITIATE</button>
       </div>
       <div class="nav-stats hidden" id="playerStatsNav">
-        <div class="stat-pill xp-pill">
-          <i class="fa-solid fa-bolt"></i> <span id="navXp">0</span> XP
+        <div class="stat-pill xp-pill" title="Experience Points">
+          <i class="fa-solid fa-bolt"></i> <span id="navXp">0</span><span class="pill-unit"> XP</span>
         </div>
-        <div class="stat-pill streak-pill">
+        <div class="stat-pill streak-pill" title="Daily Streak">
           <i class="fa-solid fa-fire"></i> <span id="navStreak">0</span>
         </div>
-        <div class="stat-pill lives-pill">
+        <div class="stat-pill lives-pill" title="Lives Remaining">
           <i class="fa-solid fa-heart"></i> <span id="navLives">3</span>
         </div>
         <div class="avatar-circle" id="navAvatar" data-nav="profile">U</div>
@@ -42,10 +47,6 @@
     <main id="mainContainer">
       <!-- 1. LANDING PAGE -->
       <section id="view-landing" class="view active-view relative overflow-hidden">
-        
-        <!-- Cyberpunk Animated Background Elements -->
-        <div class="animated-grid-bg"></div>
-        <div class="crt-scanner"></div>
 
         <!-- SECTION 01 - HERO -->
         <div class="landing-section hero-section">
@@ -425,10 +426,10 @@
         <div class="dashboard-grid">
           <!-- Sidebar Nav -->
           <nav class="cyber-sidebar">
-            <button class="nav-item active" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
-            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
-            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
-            <button class="nav-item text-danger" id="logoutBtn"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+            <button class="nav-item active" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> <span>Missions</span></button>
+            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> <span>Rankings</span></button>
+            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> <span>Profile</span></button>
+            <button class="nav-item text-danger" id="logoutBtn"><i class="fa-solid fa-power-off"></i> <span>Disconnect</span></button>
           </nav>
 
           <!-- Main Content -->
@@ -445,7 +446,7 @@
       <section id="view-game" class="view">
         <div class="gameplay-container">
           <div class="game-header">
-            <button class="cyber-button-sm" data-nav="dashboard"><i class="fa-solid fa-arrow-left"></i> ABORT</button>
+            <button class="cyber-button-sm" data-nav="dashboard"><i class="fa-solid fa-arrow-left"></i> <span class="hide-mobile">ABORT</span></button>
             <h2 id="gameLevelTitle">MISSION 01</h2>
             <div class="game-hud">
               <span id="gameTimer" class="cyber-timer">00:00</span>
@@ -507,10 +508,10 @@
       <section id="view-leaderboard" class="view app-view">
          <div class="dashboard-grid">
           <nav class="cyber-sidebar">
-            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
-            <button class="nav-item active" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
-            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
-            <button class="nav-item text-danger" id="logoutBtnLB"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> <span>Missions</span></button>
+            <button class="nav-item active" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> <span>Rankings</span></button>
+            <button class="nav-item" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> <span>Profile</span></button>
+            <button class="nav-item text-danger" id="logoutBtnLB"><i class="fa-solid fa-power-off"></i> <span>Disconnect</span></button>
           </nav>
           <div class="dashboard-content">
             <h2 class="view-title">GLOBAL RANKINGS</h2>
@@ -527,10 +528,10 @@
       <section id="view-profile" class="view app-view">
         <div class="dashboard-grid">
           <nav class="cyber-sidebar">
-            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> Missions</button>
-            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> Rankings</button>
-            <button class="nav-item active" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> Profile</button>
-            <button class="nav-item text-danger" id="logoutBtnProfile"><i class="fa-solid fa-power-off"></i> Disconnect</button>
+            <button class="nav-item" data-nav="dashboard"><i class="fa-solid fa-table-cells-large"></i> <span>Missions</span></button>
+            <button class="nav-item" data-nav="leaderboard"><i class="fa-solid fa-trophy"></i> <span>Rankings</span></button>
+            <button class="nav-item active" data-nav="profile"><i class="fa-solid fa-user-astronaut"></i> <span>Profile</span></button>
+            <button class="nav-item text-danger" id="logoutBtnProfile"><i class="fa-solid fa-power-off"></i> <span>Disconnect</span></button>
           </nav>
           
           <div class="dashboard-content profile-layout">

@@ -90,7 +90,15 @@ export const State = {
 
   async checkBackend() {
     try {
-      const res = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(1500) });
+      let signal;
+      if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+        signal = AbortSignal.timeout(2500);
+      } else {
+        const controller = new AbortController();
+        setTimeout(() => controller.abort(), 2500);
+        signal = controller.signal;
+      }
+      const res = await fetch(`${this.baseUrl}/health`, { signal });
       this.isOnline = res.ok;
     } catch {
       this.isOnline = false;
