@@ -161,15 +161,52 @@ document.getElementById('submitBugBtn')?.addEventListener('click', () => {
   }
 });
 
+// ---- Hint Modal Logic ----
+const hintOverlay  = document.getElementById('hintModalOverlay');
+const hintConfirmV = document.getElementById('hintConfirmView');
+const hintRevealV  = document.getElementById('hintRevealView');
+const hintTextEl   = document.getElementById('hintTextContent');
+
+function openHintModal() {
+  // Reset to confirmation phase every time
+  hintConfirmV.classList.remove('hidden');
+  hintRevealV.classList.add('hidden');
+  hintOverlay.classList.remove('hidden');
+}
+
+function closeHintModal() {
+  hintOverlay.classList.add('hidden');
+}
+
+// Open hint modal on button click
 document.getElementById('gameHintBtn')?.addEventListener('click', () => {
+  if (!session) return;
+  openHintModal();
+});
+
+// CONFIRM — deduct XP, track usage, reveal hint text
+document.getElementById('hintConfirmBtn')?.addEventListener('click', () => {
   if (!session) return;
   const bug = session.level.bugs[session.bugIndex];
   if (bug) {
     session.hintsUsed++;
     session.xpEarned = Math.max(0, session.xpEarned - 10);
-    showToast(`HINT: ${bug.hint}`, 'info');
     updateHUD();
+    hintTextEl.textContent = '> ' + bug.hint;
+    hintConfirmV.classList.add('hidden');
+    hintRevealV.classList.remove('hidden');
   }
+});
+
+// CANCEL button
+document.getElementById('hintCancelBtn')?.addEventListener('click', closeHintModal);
+// Close (✕) button
+document.getElementById('hintModalClose')?.addEventListener('click', closeHintModal);
+// CLOSE / Done button after reading hint
+document.getElementById('hintDoneBtn')?.addEventListener('click', closeHintModal);
+// Click on dark backdrop to dismiss
+hintOverlay?.addEventListener('click', (e) => {
+  if (e.target === hintOverlay) closeHintModal();
 });
 
 async function completeLevel() {

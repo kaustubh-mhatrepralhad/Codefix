@@ -488,7 +488,11 @@
               <div class="cyber-terminal full-height">
                 <div class="terminal-header">
                   <span id="gameFileName">target.js</span>
-                  <button class="icon-btn hint-btn" id="gameHintBtn" title="Request Hint (-10 XP)"><i class="fa-solid fa-lightbulb"></i></button>
+                  <button class="hint-trigger-btn" id="gameHintBtn" title="Request Hint (-10 XP)">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span>HINT</span>
+                    <span class="hint-xp-badge">-10 XP</span>
+                  </button>
                 </div>
                 <div class="terminal-body" id="gameTerminalBody">
                   <!-- Code injected here -->
@@ -619,6 +623,42 @@
       <button class="cyber-button primary mt-4" id="modalActionBtn">CONTINUE</button>
     </div>
   </div>
+
+  <!-- Hint Confirmation + Reveal Popup -->
+  <div class="modal-overlay hidden" id="hintModalOverlay">
+    <div class="cyber-modal hint-modal" id="hintModal">
+      <div class="modal-corner top-left"></div>
+      <div class="modal-corner top-right"></div>
+      <div class="modal-corner bottom-left"></div>
+      <div class="modal-corner bottom-right"></div>
+
+      <!-- Close (×) button -->
+      <button class="hint-modal-close" id="hintModalClose" aria-label="Close">✕</button>
+
+      <!-- PHASE 1: Confirmation screen -->
+      <div id="hintConfirmView">
+        <div class="hint-modal-icon">⚠️</div>
+        <h2 class="glitch-text" data-text="USE HINT?">USE HINT?</h2>
+        <p class="hint-modal-desc">
+          Requesting a hint will cost <span class="hint-cost-highlight">-10 XP</span> from your session score.
+          Hints also reduce your no-hint bonus. Are you sure you want to use one?
+        </p>
+        <div class="hint-modal-actions">
+          <button class="cyber-button primary" id="hintConfirmBtn">CONFIRM HINT</button>
+          <button class="cyber-button" id="hintCancelBtn">CANCEL</button>
+        </div>
+      </div>
+
+      <!-- PHASE 2: Hint reveal -->
+      <div id="hintRevealView" class="hidden">
+        <div class="hint-modal-icon">💡</div>
+        <h2 class="glitch-text" data-text="HINT DECODED">HINT DECODED</h2>
+        <div class="hint-text-box" id="hintTextContent"></div>
+        <button class="cyber-button primary hint-done-btn" id="hintDoneBtn">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
 
   <script type="module" src="/src/main.js"></script>
 </body>
